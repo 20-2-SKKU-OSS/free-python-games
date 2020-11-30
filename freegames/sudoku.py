@@ -10,9 +10,12 @@ from freegames import floor, vector, square
 #######################################
 # def game_start를 정의한다. -> game start 버튼을 생성한다. 난이도 선택 누르면 sudoku_load 한다.
 tiles = {}
-origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]#using in board_init(), not using
-board = [[0 for j in range(0, 9)] for i in range(0, 9)]      #answerboard before erase()
-board_show = [[0 for j in range(0, 9)] for i in range(0, 9)] # Board to deal with in game
+# using in board_init(), not using
+origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]
+board = [[0 for j in range(0, 9)]
+         for i in range(0, 9)]  # answerboard before erase()
+board_show = [[0 for j in range(0, 9)]
+              for i in range(0, 9)]  # Board to deal with in game
 
 #using in board_init(), not using
 row = [[0 for j in range(0, 10)] for i in range(0, 10)]
@@ -20,8 +23,9 @@ col = [[0 for j in range(0, 10)] for i in range(0, 10)]
 diag = [[0 for j in range(0, 10)] for i in range(0, 10)]
 #using in board_init(), not using
 terminate_flag = False
-difficulty = 1  # default value
-coordinate = vector(0,0)
+difficulty = -1  # default value
+coordinate = vector(0, 0)
+
 
 def board_init():
     seq_diag = [0, 4, 8]
@@ -69,6 +73,7 @@ def make_sudoku(k):
             make_sudoku(k+1)
             row[i][m], col[j][m], diag[d][m] = 0, 0, 0
             origin_board[i][j] = 0
+
 
 def erase(diff):
     global board_show
@@ -151,16 +156,29 @@ def square_given(mark, number):
     write(number, font=('Arial', 30, 'normal'))
 
 
-def change_pixel_index_to_array_index(x,y):
+def change_pixel_index_to_array_index(x, y):
     global coordinate
     "Convert (x, y) coordinates to array index."
     array_x = int((x + 225)/50)
     array_y = int((y + 325)/50)
-    print(array_y,array_x)
+    print(array_y, array_x)
     coordinate = vector(array_x, array_y)
+
+
+def change_pixel_index_to_button_index(x, y):
+    if(x >= 60 and x <= 140 and y <= 0 and y >= -80):
+        return 3
+    elif(x >= - 40 and x <= 40 and y <= 0 and y >= -80):
+        return 2
+    elif(x >= - 140 and x <= -60 and y <= 0 and y >= -80):
+        return 1
+    else:
+        return 0
+
+
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
-    change_pixel_index_to_array_index(x,y)
+    change_pixel_index_to_array_index(x, y)
     print(coordinate)
 
 
@@ -175,17 +193,31 @@ def draw():
     update()
 
 
+def tap_button(x, y):
+    global difficulty
+    result = change_pixel_index_to_button_index(x, y)
+    if(result == 1):
+        difficulty = 0
+    elif(result == 2):
+        difficulty = 1
+    elif(result == 3):
+        difficulty = 2
+
+
 def game_start():
     clear()
     while True:
-        square(-160, -80, 80, 'red')
-        square(-60, -80, 80, 'red')
-        square(40, -80, 80, 'red')
+        square(-140, -80, 80, 'red')
+        square(-40, -80, 80, 'red')
+        square(60, -80, 80, 'red')
+        onscreenclick(tap_button)
         up()
         goto(0, 100)
         down()
         write("Please select your difficulty", move=True,
               align="center", font=("맑은고딕", 18, "bold"))
+        if(difficulty != -1):
+            break
     clear()
     board_init()
     make_sudoku(0)
