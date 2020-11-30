@@ -162,14 +162,17 @@ def change_pixel_index_to_array_index(x,y):
     #if click coordinate is out of box, change coordinate -1, -1
     print(array_y,array_x)
     coordinate = vector(array_x, array_y)
-def tap(x, y):
+def tap_ingame(x, y):
     "Update mark and hidden tiles based on tap."
     change_pixel_index_to_array_index(x,y)
     print(coordinate)
 
 
 def print_title():
-    write("SUDOKU", move=False, align="center", font=("Arial", 20, "bold"))
+    up()
+    goto(0, 250)
+    down()
+    write("SUDOKU", move=False, align="center", font=("Arial", 30, "bold"))
 
 
 def draw():
@@ -182,23 +185,28 @@ def game_start():
     clear()
     print_title()
     while True:
-        square(-160, -80, 80, 'red')
-        square(-60, -80, 80, 'red')
-        square(40, -80, 80, 'red')
+        square(-140, -80, 80, 'gray')
+        square(-40, -80, 80, 'gray')
+        square(60, -80, 80, 'gray')
         up()
         goto(0, 100)
         down()
+        color('black')
         write("Please select your difficulty", move=True, align="center", font=("맑은고딕", 18, "bold"))
         break
     board_init()
     make_sudoku(0)
     erase(difficulty)
+    
+def ingame():
+    onscreenclick(tap_ingame) #bind tap_ingame
     sudoku_load()
     draw()
 
+    onscreenclick(None) #unbind tap_ingame
 setup(600, 800, 370, 0)
 hideturtle()
 tracer(False)
 game_start()
-onscreenclick(tap)
+
 done()
