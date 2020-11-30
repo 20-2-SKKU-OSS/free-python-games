@@ -1,6 +1,6 @@
 from random import *
 from turtle import *
-from freegames import floor, vector
+from freegames import floor, vector, square
 
 # def sudoku_load 를 정의한다. -> 실행할 때마다 현재 sudoku 상태를 입력된 숫자를 base로 업데이트
 # 입력된 것이 1~9가 아닐경우 에러 메세지를 출력한다.
@@ -128,7 +128,7 @@ def sudoku_load():
                 break
 
 
-def square(mark, number):
+def square_given(mark, number):
     "Draw white square with black outline and number."
     up()
     goto(mark.x, mark.y)
@@ -163,31 +163,34 @@ def tap(x, y):
 
 
 def print_title():
-    penup()
-    goto([0, 250])
-    pendown()
     write("SUDOKU", move=False, align="center", font=("Arial", 20, "bold"))
-
 
 
 def draw():
     "Draw all tiles."
     for mark in tiles:
-        square(mark, tiles[mark])
+        square_given(mark, tiles[mark])
     update()
 
 
 def game_start():
+    clear()
     while True:
-        write("please select your difficulty", move=false,
+        square(-160, -80, 80, 'red')
+        square(-60, -80, 80, 'red')
+        square(40, -80, 80, 'red')
+        up()
+        goto(0, 100)
+        down()
+        write("Please select your difficulty", move=True,
               align="center", font=("맑은고딕", 18, "bold"))
 
 
 setup(600, 800, 370, 0)
 hideturtle()
-print_title()
 tracer(False)
 game_start()
+hideturtle()
 clear()
 board_init()
 make_sudoku(0)
