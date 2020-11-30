@@ -130,7 +130,7 @@ def sudoku_load():
                 break
 
 #to use square, rename func from square
-def square_given(mark, number):
+def square(mark, number):
     "Draw white square with black outline and number."
     up()
     goto(mark.x, mark.y)
@@ -151,11 +151,8 @@ def square_given(mark, number):
     write(number, font=('Arial', 30, 'normal'))
 
 
-def index(x, y):
+def change_pixel_index_to_array_index(x,y):
     "Convert (x, y) coordinates to tiles index."
-    return int((x + 200) // 50 + ((y + 200) // 50) * 8)
-
-
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
     global coordinate
