@@ -152,7 +152,10 @@ def square(mark, number):
 
 
 def change_pixel_index_to_array_index(x,y):
-    "Convert (x, y) coordinates to tiles index."
+    "Convert (x, y) coordinates to array index."
+    array_x = (x + 225)/50
+    array_y = (x + 325)/50
+    print(array_y,array_x)
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
     global coordinate
