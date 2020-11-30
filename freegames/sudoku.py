@@ -152,17 +152,16 @@ def square(mark, number):
 
 
 def change_pixel_index_to_array_index(x,y):
+    global coordinate
     "Convert (x, y) coordinates to array index."
-    array_x = (x + 225)/50
-    array_y = (x + 325)/50
+    array_x = int((x + 225)/50)
+    array_y = int((y + 325)/50)
     print(array_y,array_x)
+    coordinate = vector(array_x, array_y)
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
-    global coordinate
-    coordinate = vector(x, y)
+    change_pixel_index_to_array_index(x,y)
     print(coordinate)
-    # 좌표를 ifelse
-    # 버튼을 클릭하고
 
 
 def print_title():
@@ -196,5 +195,7 @@ setup(600, 800, 370, 0) # set window size
 hideturtle()
 tracer(False)
 game_start()
+onscreenclick(tap)
+#onscreenclick(None) if you want to unbind func from onscreenclick, write this line on your code
 #tap 할때마다 coordinate 설정
 done()
