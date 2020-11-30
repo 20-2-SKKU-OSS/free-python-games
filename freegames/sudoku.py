@@ -10,15 +10,18 @@ from freegames import floor, vector, square
 #######################################
 # def game_start를 정의한다. -> game start 버튼을 생성한다. 난이도 선택 누르면 sudoku_load 한다.
 tiles = {}
-origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]
-board = [[0 for j in range(0, 9)] for i in range(0, 9)]
-board_show = [[0 for j in range(0, 9)] for i in range(0, 9)]
+origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]#using in board_init(), not using
+board = [[0 for j in range(0, 9)] for i in range(0, 9)]      #answerboard before erase()
+board_show = [[0 for j in range(0, 9)] for i in range(0, 9)] # Board to deal with in game
+
+#using in board_init(), not using
 row = [[0 for j in range(0, 10)] for i in range(0, 10)]
 col = [[0 for j in range(0, 10)] for i in range(0, 10)]
 diag = [[0 for j in range(0, 10)] for i in range(0, 10)]
+#using in board_init(), not using
 terminate_flag = False
-difficulty = -1  # default value
-
+difficulty = 1  # default value
+coordinate = vector(0,0)
 
 def board_init():
     seq_diag = [0, 4, 8]
@@ -66,7 +69,6 @@ def make_sudoku(k):
             make_sudoku(k+1)
             row[i][m], col[j][m], diag[d][m] = 0, 0, 0
             origin_board[i][j] = 0
-
 
 def erase(diff):
     global board_show
@@ -127,8 +129,13 @@ def sudoku_load():
             if(i == 9):
                 break
 
+<<<<<<< HEAD
 
 def square_given(mark, number):
+=======
+#to use square, rename func from square
+def square(mark, number):
+>>>>>>> 8a58e4c391d6ea94f56f35d4c4645a7f19036623
     "Draw white square with black outline and number."
     up()
     goto(mark.x, mark.y)
@@ -149,17 +156,17 @@ def square_given(mark, number):
     write(number, font=('Arial', 30, 'normal'))
 
 
-def index(x, y):
-    "Convert (x, y) coordinates to tiles index."
-    return int((x + 200) // 50 + ((y + 200) // 50) * 8)
-
-
+def change_pixel_index_to_array_index(x,y):
+    global coordinate
+    "Convert (x, y) coordinates to array index."
+    array_x = int((x + 225)/50)
+    array_y = int((y + 325)/50)
+    print(array_y,array_x)
+    coordinate = vector(array_x, array_y)
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
-    coordinate = vector(x, y)
+    change_pixel_index_to_array_index(x,y)
     print(coordinate)
-    # 좌표를 ifelse
-    # 버튼을 클릭하고
 
 
 def print_title():
@@ -176,6 +183,7 @@ def draw():
 def game_start():
     clear()
     while True:
+<<<<<<< HEAD
         square(-160, -80, 80, 'red')
         square(-60, -80, 80, 'red')
         square(40, -80, 80, 'red')
@@ -197,4 +205,22 @@ make_sudoku(0)
 erase(difficulty)
 sudoku_load()
 draw()
+=======
+        write("Please select your difficulty", move= False, align="center", font=("맑은고딕", 18, "bold"))
+        break
+    print_title()
+    board_init() # assign sudoku board 
+    make_sudoku(0)
+    erase(difficulty)
+    sudoku_load()
+    draw()
+
+setup(600, 800, 370, 0) # set window size
+hideturtle()
+tracer(False)
+game_start()
+onscreenclick(tap)
+#onscreenclick(None) if you want to unbind func from onscreenclick, write this line on your code
+#tap 할때마다 coordinate 설정
+>>>>>>> 8a58e4c391d6ea94f56f35d4c4645a7f19036623
 done()
