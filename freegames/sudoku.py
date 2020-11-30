@@ -235,6 +235,7 @@ def game_start():
     
 def ingame():
     onscreenclick(tap_ingame) #bind tap_ingame
+    print_title()
     sudoku_load()
     draw()
 
@@ -243,5 +244,5 @@ setup(600, 800, 370, 0)
 hideturtle()
 tracer(False)
 game_start()
-
+ingame()
 done()
