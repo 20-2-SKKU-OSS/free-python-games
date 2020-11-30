@@ -18,7 +18,7 @@ row = [[0 for j in range(0, 10)] for i in range(0, 10)]
 col = [[0 for j in range(0, 10)] for i in range(0, 10)]
 diag = [[0 for j in range(0, 10)] for i in range(0, 10)]
 terminate_flag = False
-difficulty = -1
+difficulty = 2
 def board_init():
     seq_diag = [0, 4, 8]
     for offset in range(0, 9, 3):
@@ -113,8 +113,8 @@ def sudoku_load():
 
     i = 0
     j = 0
-    for y in range(-200, 250, 50):
-        for x in range(-200, 250, 50):
+    for y in range(-325, 125, 50):
+        for x in range(-225, 225, 50):
             mark = vector(x, y)
             tiles[mark] = board_show[i][j]
             j = j + 1
@@ -150,6 +150,8 @@ def tap(x, y):
     "Update mark and hidden tiles based on tap."
     coordinate = vector(x, y)
     print(coordinate)
+    # 좌표를 ifelse
+    # 버튼을 클릭하고
 
 def draw():
     "Draw all tiles."
@@ -160,11 +162,11 @@ def game_start():
     "draw game start button and select difficulty"
     print("Hello")
     s = textinput("", "please select your difficulty")
+    onscreenclick(tap)
 
 
-setup(1000, 1000, 370, 0)
+setup(600, 800, 370, 0)
 hideturtle()
-onscreenclick(tap)
 tracer(False)
 game_start()
 board_init()
