@@ -19,6 +19,8 @@ col = [[0 for j in range(0, 10)] for i in range(0, 10)]
 diag = [[0 for j in range(0, 10)] for i in range(0, 10)]
 terminate_flag = False
 difficulty = 2
+
+
 def board_init():
     seq_diag = [0, 4, 8]
     for offset in range(0, 9, 3):
@@ -65,6 +67,8 @@ def make_sudoku(k):
             make_sudoku(k+1)
             row[i][m], col[j][m], diag[d][m] = 0, 0, 0
             origin_board[i][j] = 0
+
+
 def erase(diff):
     global board_show
 
@@ -124,6 +128,7 @@ def sudoku_load():
             if(i == 9):
                 break
 
+
 def square(mark, number):
     "Draw white square with black outline and number."
     up()
@@ -143,9 +148,13 @@ def square(mark, number):
         forward(20)
 
     write(number, font=('Arial', 30, 'normal'))
+
+
 def index(x, y):
     "Convert (x, y) coordinates to tiles index."
     return int((x + 200) // 50 + ((y + 200) // 50) * 8)
+
+
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
     coordinate = vector(x, y)
@@ -153,11 +162,21 @@ def tap(x, y):
     # 좌표를 ifelse
     # 버튼을 클릭하고
 
+
+def print_title():
+    penup()
+    goto([0, 250])
+    pendown()
+    write("SUDOKU", move=False, align="center", font=("Arial", 20, "bold"))
+
+
 def draw():
     "Draw all tiles."
     for mark in tiles:
         square(mark, tiles[mark])
     update()
+
+
 def game_start():
     "draw game start button and select difficulty"
     print("Hello")
@@ -167,8 +186,10 @@ def game_start():
 
 setup(600, 800, 370, 0)
 hideturtle()
+print_title()
 tracer(False)
 game_start()
+clear()
 board_init()
 make_sudoku(0)
 erase(difficulty)
