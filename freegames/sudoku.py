@@ -10,7 +10,6 @@ from freegames import floor, vector
 #######################################
 # def game_start를 정의한다. -> game start 버튼을 생성한다. 난이도 선택 누르면 sudoku_load 한다.
 tiles = {}
-difficulty = 0
 origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]
 board = [[0 for j in range(0, 9)] for i in range(0, 9)]
 board_show = [[0 for j in range(0, 9)] for i in range(0, 9)]
@@ -18,7 +17,7 @@ row = [[0 for j in range(0, 10)] for i in range(0, 10)]
 col = [[0 for j in range(0, 10)] for i in range(0, 10)]
 diag = [[0 for j in range(0, 10)] for i in range(0, 10)]
 terminate_flag = False
-difficulty = -1
+difficulty = -1  # default value
 
 
 def board_init():
@@ -169,9 +168,9 @@ def draw():
 
 
 def game_start():
-    "draw game start button and select difficulty"
-    print("Hello")
-    s = textinput("", "please select your difficulty")
+    while True:
+        write("please select your difficulty", move=false,
+              align="center", font=("맑은고딕", 18, "bold"))
 
 
 setup(1000, 1000, 370, 0)
