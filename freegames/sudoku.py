@@ -156,6 +156,10 @@ def change_pixel_index_to_array_index(x,y):
     "Convert (x, y) coordinates to array index."
     array_x = int((x + 225)/50)
     array_y = int((y + 325)/50)
+    if(array_x < 0 or array_x > 8 or array_y < 0 or array_y > 8):
+        array_x = -1
+        array_y = -1
+    #if click coordinate is out of box, change coordinate -1, -1
     print(array_y,array_x)
     coordinate = vector(array_x, array_y)
 def tap(x, y):
@@ -174,9 +178,9 @@ def draw():
         square_given(mark, tiles[mark])
     update()
 
-
 def game_start():
     clear()
+    print_title()
     while True:
         square(-160, -80, 80, 'red')
         square(-60, -80, 80, 'red')
@@ -184,15 +188,13 @@ def game_start():
         up()
         goto(0, 100)
         down()
-        write("Please select your difficulty", move=True,
-              align="center", font=("맑은고딕", 18, "bold"))
-    clear()
+        write("Please select your difficulty", move=True, align="center", font=("맑은고딕", 18, "bold"))
+        break
     board_init()
     make_sudoku(0)
     erase(difficulty)
     sudoku_load()
     draw()
-
 
 setup(600, 800, 370, 0)
 hideturtle()
