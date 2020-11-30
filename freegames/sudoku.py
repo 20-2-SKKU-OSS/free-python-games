@@ -10,15 +10,18 @@ from freegames import floor, vector
 #######################################
 # def game_start를 정의한다. -> game start 버튼을 생성한다. 난이도 선택 누르면 sudoku_load 한다.
 tiles = {}
-origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]
-board = [[0 for j in range(0, 9)] for i in range(0, 9)]
-board_show = [[0 for j in range(0, 9)] for i in range(0, 9)]
+origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]#using in board_init(), not using
+board = [[0 for j in range(0, 9)] for i in range(0, 9)]      #answerboard before erase()
+board_show = [[0 for j in range(0, 9)] for i in range(0, 9)] # Board to deal with in game
+
+#using in board_init(), not using
 row = [[0 for j in range(0, 10)] for i in range(0, 10)]
 col = [[0 for j in range(0, 10)] for i in range(0, 10)]
 diag = [[0 for j in range(0, 10)] for i in range(0, 10)]
+#using in board_init(), not using
 terminate_flag = False
-difficulty = -1  # default value
-
+difficulty = 1  # default value
+coordinate = vector(0,0)
 
 def board_init():
     seq_diag = [0, 4, 8]
@@ -66,7 +69,6 @@ def make_sudoku(k):
             make_sudoku(k+1)
             row[i][m], col[j][m], diag[d][m] = 0, 0, 0
             origin_board[i][j] = 0
-
 
 def erase(diff):
     global board_show
@@ -127,8 +129,8 @@ def sudoku_load():
             if(i == 9):
                 break
 
-
-def square(mark, number):
+#to use square, rename func from square
+def square_given(mark, number):
     "Draw white square with black outline and number."
     up()
     goto(mark.x, mark.y)
@@ -156,6 +158,7 @@ def index(x, y):
 
 def tap(x, y):
     "Update mark and hidden tiles based on tap."
+    global coordinate
     coordinate = vector(x, y)
     print(coordinate)
     # 좌표를 ifelse
@@ -178,20 +181,20 @@ def draw():
 
 
 def game_start():
+    clear()
     while True:
-        write("please select your difficulty", move=false,
-              align="center", font=("맑은고딕", 18, "bold"))
+        write("Please select your difficulty", move= False, align="center", font=("맑은고딕", 18, "bold"))
+        break
+    print_title()
+    board_init() # assign sudoku board 
+    make_sudoku(0)
+    erase(difficulty)
+    sudoku_load()
+    draw()
 
-
-setup(600, 800, 370, 0)
+setup(600, 800, 370, 0) # set window size
 hideturtle()
-print_title()
 tracer(False)
 game_start()
-clear()
-board_init()
-make_sudoku(0)
-erase(difficulty)
-sudoku_load()
-draw()
+#tap 할때마다 coordinate 설정
 done()
