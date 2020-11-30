@@ -1,14 +1,9 @@
 from random import *
 from turtle import *
 from freegames import floor, vector, square
-
-# def sudoku_load 를 정의한다. -> 실행할 때마다 현재 sudoku 상태를 입력된 숫자를 base로 업데이트
 # 입력된 것이 1~9가 아닐경우 에러 메세지를 출력한다.
-# 입력된 것이 한줄 혹은 한 박스를 모두 채우면 색깔을 바꾼다?
-# 입력된 숫자는 업데이트 할 수 있어야 한다.
-# def sudoku_restart를 정의한다. -> 초기화 한다.
-#######################################
-# def game_start를 정의한다. -> game start 버튼을 생성한다. 난이도 선택 누르면 sudoku_load 한다.
+# 정답검사, 게임 종료조건, restart 버튼,
+#
 tiles = {}
 # using in board_init(), not using
 origin_board = [[0 for j in range(0, 9)] for i in range(0, 9)]
@@ -16,7 +11,8 @@ board = [[0 for j in range(0, 9)]
          for i in range(0, 9)]  # answerboard before erase()
 board_show = [[0 for j in range(0, 9)]
               for i in range(0, 9)]  # Board to deal with in game
-
+board_tofill = [[0 for j in range(0, 9)]
+              for i in range(0, 9)]  # Board to deal with in game
 #using in board_init(), not using
 row = [[0 for j in range(0, 10)] for i in range(0, 10)]
 col = [[0 for j in range(0, 10)] for i in range(0, 10)]
@@ -55,6 +51,7 @@ def make_sudoku(k):
             for j in range(0, 9):
                 board[i][j] = origin_board[i][j]
                 board_show[i][j] = origin_board[i][j]
+                board_tofill[i][j] = origin_board[i][j]
         terminate_flag = True
         return True
 
@@ -87,8 +84,9 @@ def erase(diff):
                     j = randrange(y, y + 3)
                     if(count == 3):
                         continue
-                    if(board_show[i][j] != None):
+                    if(board_show[i][j] is not None):
                         board_show[i][j] = None
+                        board_tofill[i][j] = None
                         count += 1
 
     if(diff == 1):
@@ -100,8 +98,9 @@ def erase(diff):
                     j = randrange(y, y + 3)
                     if(count == 4):
                         continue
-                    if(board_show[i][j] != None):
+                    if(board_show[i][j] is not None):
                         board_show[i][j] = None
+                        board_tofill[i][j] = None
                         count += 1
 
     if(diff == 2):
@@ -113,8 +112,9 @@ def erase(diff):
                     j = randrange(y, y + 3)
                     if(count == 5):
                         continue
-                    if(board_show[i][j] != None):
+                    if(board_show[i][j] is not None):
                         board_show[i][j] = None
+                        board_tofill[i][j] = None
                         count += 1
 
 
@@ -126,7 +126,7 @@ def sudoku_load():
     for y in range(-325, 125, 50):
         for x in range(-225, 225, 50):
             mark = vector(x, y)
-            tiles[mark] = board_show[i][j]
+            tiles[mark] = board_tofill[i][j]
             j = j + 1
             if(j == 9):
                 j = 0
@@ -155,23 +155,21 @@ def square_given(mark, number):
 
     write(number, font=('Arial', 30, 'normal'))
 
-
-def change_pixel_index_to_array_index(x, y):
-    global coordinate
-    "Convert (x, y) coordinates to array index."
+#게임 함수 클릭시마다 발생함
+def tap_ingame(x, y):
     array_x = int((x + 225)/50)
     array_y = int((y + 325)/50)
     if(array_x < 0 or array_x > 8 or array_y < 0 or array_y > 8):
         array_x = -1
         array_y = -1
-    #if click coordinate is out of box, change coordinate -1, -1
-    print(array_y,array_x)
-    coordinate = vector(array_x, array_y)
-    
-def tap_ingame(x, y):
+    # if click coordinate is out of box, change coordinate -1, -1
     print(array_y, array_x)
-    coordinate = vector(array_x, array_y)
-
+    print(board_show[array_y][array_x])
+    #필요필요 코딩필요
+    if(board_show[array_y][array_x] is None):
+        board_tofill[array_y][array_x] = int(numinput("num input", "plz input number", None, minval=1, maxval=9))
+    sudoku_load()
+    draw()
 
 def change_pixel_index_to_button_index(x, y):
     if(x >= 60 and x <= 140 and y <= 0 and y >= -80):
@@ -182,12 +180,6 @@ def change_pixel_index_to_button_index(x, y):
         return 1
     else:
         return 0
-
-
-def tap(x, y):
-    "Update mark and hidden tiles based on tap."
-    change_pixel_index_to_array_index(x, y)
-    print(coordinate)
 
 
 def print_title():
@@ -203,6 +195,7 @@ def draw():
         square_given(mark, tiles[mark])
     update()
 
+
 def tap_button(x, y):
     global difficulty
     result = change_pixel_index_to_button_index(x, y)
@@ -213,36 +206,54 @@ def tap_button(x, y):
     elif(result == 3):
         difficulty = 2
 
+    if(difficulty != -1):
+        clear()
+        board_init()
+        make_sudoku(0)
+        erase(difficulty)
+        ingame()
+
+
 def game_start():
     clear()
     print_title()
-    while True:
-        square(-140, -80, 80, 'gray')
-        square(-40, -80, 80, 'gray')
-        square(60, -80, 80, 'gray')
-        onscreenclick(tap_button)
-        up()
-        goto(0, 100)
-        down()
-        color('black')
-        write("Please select your difficulty", move=True, align="center", font=("맑은고딕", 18, "bold"))
-        if(difficulty != -1):
-            break
-    clear()
-    board_init()
-    make_sudoku(0)
-    erase(difficulty)
-    
+    square(-140, -80, 80, 'gray')
+    up()
+    goto(-100, -50)
+    down()
+    color('black')
+    write("Easy", move=True, align="center", font=("Arial", 15, "bold"))
+    square(-40, -80, 80, 'gray')
+    up()
+    goto(0, -50)
+    down()
+    color('black')
+    write("Normal", move=True, align="center", font=("맑은고딕", 15, "bold"))
+    square(60, -80, 80, 'gray')
+    up()
+    goto(100, -50)
+    down()
+    color('black')
+    write("Hard", move=True, align="center", font=("맑은고딕", 15, "bold"))
+    up()
+    goto(0, 100)
+    down()
+    color('black')
+    write("Please select your difficulty", move=True,
+          align="center", font=("맑은고딕", 18, "bold"))
+    onscreenclick(tap_button)
+
+
 def ingame():
-    onscreenclick(tap_ingame) #bind tap_ingame
     print_title()
     sudoku_load()
     draw()
+    onscreenclick(None)
+    onscreenclick(tap_ingame)  # bind tap_ingame
 
-    onscreenclick(None) #unbind tap_ingame
+
 setup(600, 800, 370, 0)
 hideturtle()
 tracer(False)
 game_start()
-ingame()
 done()
