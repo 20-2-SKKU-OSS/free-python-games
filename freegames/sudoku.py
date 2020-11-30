@@ -129,13 +129,8 @@ def sudoku_load():
             if(i == 9):
                 break
 
-<<<<<<< HEAD
 
 def square_given(mark, number):
-=======
-#to use square, rename func from square
-def square(mark, number):
->>>>>>> 8a58e4c391d6ea94f56f35d4c4645a7f19036623
     "Draw white square with black outline and number."
     up()
     goto(mark.x, mark.y)
@@ -183,7 +178,6 @@ def draw():
 def game_start():
     clear()
     while True:
-<<<<<<< HEAD
         square(-160, -80, 80, 'red')
         square(-60, -80, 80, 'red')
         square(40, -80, 80, 'red')
@@ -192,35 +186,17 @@ def game_start():
         down()
         write("Please select your difficulty", move=True,
               align="center", font=("맑은고딕", 18, "bold"))
+    clear()
+    board_init()
+    make_sudoku(0)
+    erase(difficulty)
+    sudoku_load()
+    draw()
 
 
 setup(600, 800, 370, 0)
 hideturtle()
 tracer(False)
 game_start()
-hideturtle()
-clear()
-board_init()
-make_sudoku(0)
-erase(difficulty)
-sudoku_load()
-draw()
-=======
-        write("Please select your difficulty", move= False, align="center", font=("맑은고딕", 18, "bold"))
-        break
-    print_title()
-    board_init() # assign sudoku board 
-    make_sudoku(0)
-    erase(difficulty)
-    sudoku_load()
-    draw()
-
-setup(600, 800, 370, 0) # set window size
-hideturtle()
-tracer(False)
-game_start()
 onscreenclick(tap)
-#onscreenclick(None) if you want to unbind func from onscreenclick, write this line on your code
-#tap 할때마다 coordinate 설정
->>>>>>> 8a58e4c391d6ea94f56f35d4c4645a7f19036623
 done()
